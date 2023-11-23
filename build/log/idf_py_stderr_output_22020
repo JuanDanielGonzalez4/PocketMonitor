@@ -1,0 +1,12 @@
+Compiler supported targets: xtensa-esp32-elf
+
+CMake Error at C:/Users/juang/esp/esp-idf/tools/cmake/component.cmake:479 (add_library):
+  add_library cannot create target "__idf_main" because another target with
+  the same name already exists.  The existing target is a static library
+  created in source directory
+  "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main".  See
+  documentation for policy CMP0002 for more details.
+Call Stack (most recent call first):
+  main/CMakeLists.txt:8 (idf_component_register)
+
+
