@@ -38,10 +38,10 @@ void adc_read_task(void *pvParameters)
         printf("Voltage adc: %f\n", voltage_adc);
 
         xQueueSend(ADC_QUEUE, &voltage_adc, portMAX_DELAY);
-        if (xQueueReceive(ADC_QUEUE, &voltage_adc, portMAX_DELAY))
-        {
-            printf("Received: %d\n", voltage_adc);
-        }
+        // if (xQueueReceive(ADC_QUEUE, &voltage_adc, portMAX_DELAY))
+        // {
+        //     printf("Received: %f\n", voltage_adc);
+        // }
         vTaskDelay(pdMS_TO_TICKS(DELAY));
     }
 }

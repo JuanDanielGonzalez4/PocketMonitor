@@ -10,6 +10,7 @@ if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   "bootloader\\bootloader.bin"
   "bootloader\\bootloader.elf"
   "bootloader\\bootloader.map"
+  "chart.js.S"
   "config\\sdkconfig.cmake"
   "config\\sdkconfig.h"
   "esp-idf\\esptool_py\\flasher_args.json.in"

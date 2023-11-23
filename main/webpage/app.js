@@ -4,11 +4,47 @@
 var seconds = null;
 var otaTimerVar = null;
 var wifiConnectInterval = null;
+var yValues = [];
+var array_length = 10;
+var myChart;
+
+
 
 /**
  * Initialize functions here.
  */
+
 $(document).ready(function () {
+  var xValues = [];
+  for (let i = 0; i < array_length; i++) {
+    xValues[i] = i;
+  }
+
+  const ctx = document.getElementById('myChart').getContext('2d');
+  myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: xValues,
+      datasets: [{
+        fill: false,
+        lineTension: 0,
+        backgroundColor: "#1de9b6",
+        borderColor: "#1de9b6 ",
+        data: yValues
+      }]
+    },
+    options: {
+      legend: {display: false},
+      scales: {
+        yAxes: [{ticks: {min: 0, max:4000}}],
+      },
+      title:{
+        display: true,
+        text: 'Electrocardiogram'
+      }
+    }
+  });
+
   $("#connect_wifi").on("click", function () {
     checkCredentials();
   });
@@ -110,6 +146,8 @@ function getWifiConnectStatus() {
       document.getElementById("wifi_connect_status").innerHTML =
         "Conexión Exitosa";
 
+
+
       stopWifiConnectStatusInterval();
     }
   }
@@ -188,7 +226,7 @@ function checkCredentials() {
 }
 
 /**
- * Shows the WiFi password if the box is checked.
+ * Shows the WiFi password if the box is checked.f
  */
 function showPassword() {
   var x = document.getElementById("connect_pass");
@@ -199,3 +237,38 @@ function showPassword() {
   }
 }
 
+/**
+ * Update the adc value once is fetched.
+ */
+function updateADCValue() {
+  fetch("/adc_value")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.text();
+    })
+    .then((data) => {
+      console.log("ADC Value:", data); // Logging ADC value to the console
+      document.getElementById("adcValue").innerText = data;
+
+      var adcValue = parseFloat(data); // Convert string to float
+      yValues.push(adcValue); // Add the value to the array
+
+      // Limit the array to a certain length (for example, 10)
+      if (yValues.length > array_length) {
+        yValues.shift(); // Remove the oldest element
+      }
+
+      // Update the chart
+      console.log("yvlaue", yValues)
+      myChart.data.datasets[0].data = yValues;
+      myChart.update();
+
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+    });
+}
+
+setInterval(updateADCValue, 300);
