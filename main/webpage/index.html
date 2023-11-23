@@ -6,16 +6,38 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<script src='jquery-3.3.1.min.js'></script>
-	<link rel="icon" href="favicon.png" type="image/x-icon">
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="app.css">
-	<script async src="app.js"></script>
+	<script src="chart.js"></script>
+	<script src="app.js"></script>
+
 	<title>Pocket Monitor</title>
 </head>
 
 <body>
-	<div>
-		<h1>Hello world</h1>
-		<a href="#" class="button">Button</a>
-	</div>
+	
+	<header id="header">
+		<img id="icon" src="favicon.ico"/>
+		<p> Pocket Monitor</p>
+	</header>
+	<main>
+		<h1>!Welcome to <span>Pocket Monitor</span>!</h1>
+		<h2>Your Doctor in a few clicks</h2>
+
+		<div id="heartRate">
+			<h2>Heart Rate:
+				<span id="adcValue"></span>
+			</h2>
+		</div>
+
+		<div>
+			<canvas id="myChart" ></canvas>
+		</div>
+
+		<a href="#" class="button">Send</a>
+	</main>
+	<footer>
+		Developed by Jhon Edwin Garcia, Miguel Angel Arias, Juan Daniel Gonzalez
+	</footer>
 </body>
 <html>
