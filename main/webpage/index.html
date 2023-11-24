@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="app.css">
 	<script src="chart.js"></script>
 	<script src="app.js"></script>
+	
 
 	<title>Pocket Monitor</title>
 </head>
@@ -30,11 +31,24 @@
 			</h2>
 		</div>
 
-		<div>
+		<div class="chart-container">
 			<canvas id="myChart" ></canvas>
 		</div>
 
-		<a href="#" class="button">Send</a>
+		<a href="#" class="button" onclick="updateFirmwareButton()">Update Firmware</a>
+		<div id="OTA">
+			<h2>ESP32 Firmware Update</h2>
+			<label id="latest_firmware_label">Latest Firmware: </label>
+			<div id="latest_firmware"></div>
+			<input type="file" id="selected_file" accept=".bin" style="display: none;" onchange="getFileInfo()" />
+			<div class="buttons">
+				<input type="button" class="button" value="Select File"
+					onclick="document.getElementById('selected_file').click();" />
+				<input type="button" class="button"  value="Update Firmware" onclick="updateFirmware()" />
+			</div>
+			<h4 id="file_info"></h4>	
+			<h4 id="ota_update_status"></h4>
+		</div>
 	</main>
 	<footer>
 		Developed by Jhon Edwin Garcia, Miguel Angel Arias, Juan Daniel Gonzalez

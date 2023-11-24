@@ -1,6 +1,3 @@
-html {
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +14,7 @@ main{
   flex-direction: column;
   height: 80vh;
   width: 100%;
-  text-align: center
+  text-align: center;
   font-size: 1.5em;
   color: black;
   align-items: center;
@@ -48,11 +45,12 @@ header{
   height: 10vh;
 }
 
+
 footer{
   margin-left: 2rem;
-  display: flex;
+  display: block;
   align-item: center;
-  height: 10vh;
+  height: 5vh; 
 }
 
 #icon{
@@ -60,10 +58,17 @@ footer{
   height: 80px;
 }
 
-#myChart{
-  width: 70vh;
-  height: 50vh;
-  margin: 3rem;
+.chart-container{
+    width: 70%; 
+    height: 50vh; 
+    margin-bottom: 2rem;
+}
+
+#OTA{
+  margin-top: 1rem;
+  font-size: 1rem;
+  display: none;
+  height: auto;
 }
 p{
   font-size: 2.8rem;
@@ -93,12 +98,12 @@ h2 {
 
 h3 {
   font-size: 0.7em;
-  color: white;
+  color: black;
 }
 
 h4 {
   font-size: 1em;
-  color: white;
+  color: black;
 }
 
 #latest_firmware,
@@ -106,7 +111,7 @@ h4 {
   display: inline;
 }
 #latest_firmware {
-  color: white;
+  color: black;
 }
 
 .button{
@@ -122,6 +127,7 @@ h4 {
   background: #1de9b6;
   line-height: 1.15;
   font-size: 16px;
+  margin: 0.5rem;
 }
 
 .button:hover {
