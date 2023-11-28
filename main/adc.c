@@ -4,6 +4,14 @@ adc_oneshot_unit_handle_t adc1_handle;
 
 QueueHandle_t ADC_QUEUE;
 
+QueueHandle_t BPM_QUEUE;
+
+
+static int64_t beat_old = 0;
+static float beats[BPM_ARRAY_SIZE];
+static int beatIndex = 0;
+static int BPM = 0;
+
 void adc_config(void)
 {
     adc_oneshot_unit_init_cfg_t init_config1 = {
@@ -26,6 +34,30 @@ void adc_config(void)
     xTaskCreate(adc_read_task, "adc_read_task", 2048, NULL, 5, NULL);
 }
 
+void calculate_bpm(){
+
+    BPM_QUEUE = xQueueCreate(10, sizeof(double));
+
+    int64_t beat_new = esp_timer_get_time() / 1000; // Convert to milliseconds
+    int64_t diff = beat_new - beat_old;
+    if (diff > 0) { // Prevent division by zero
+        float currentBPM = 60000.0 / diff; // Convert to BPM
+        beats[beatIndex] = currentBPM;
+
+        float total = 0.0;
+        for (int i = 0; i < BPM_ARRAY_SIZE; i++) {
+            total += beats[i];
+        }
+        BPM = (int)(total / BPM_ARRAY_SIZE);
+
+        printf("BPM: %d\n", BPM);
+        
+        xQueueSend(BPM_QUEUE, &BPM, portMAX_DELAY);
+
+        beat_old = beat_new;
+        beatIndex = (beatIndex + 1) % BPM_ARRAY_SIZE;
+    }
+}
 void adc_read_task(void *pvParameters)
 {
     int data;
@@ -35,6 +67,11 @@ void adc_read_task(void *pvParameters)
 
         printf("Value adc: %d\n", data);
         double voltage_adc = ((double)data / ADC_MAX_VALUE) * VOLTAGE_REFERENCE;
+
+        if (voltage_adc>BPM_TRESHOLD){
+            calculate_bpm();
+        } 
+
         printf("Voltage adc: %f\n", voltage_adc);
 
         xQueueSend(ADC_QUEUE, &voltage_adc, portMAX_DELAY);

@@ -5,7 +5,7 @@ var seconds = null;
 var otaTimerVar = null;
 var wifiConnectInterval = null;
 var yValues = [];
-var array_length = 10;
+var array_length = 100;
 var myChart;
 
 
@@ -30,6 +30,7 @@ $(document).ready(function () {
         lineTension: 0,
         backgroundColor: "#1de9b6",
         borderColor: "#1de9b6 ",
+        pointRadius: 0,
         data: yValues
       }]
     },
@@ -41,10 +42,13 @@ $(document).ready(function () {
       title:{
         display: true,
         text: 'Electrocardiogram'
-      }
+      },
+      responsive: true,
+      maintainAspectRatio: false
     }
   });
 
+  getUpdateStatus();
   $("#connect_wifi").on("click", function () {
     checkCredentials();
   });
@@ -96,6 +100,38 @@ function updateProgress(oEvent) {
   } else {
     window.alert("total size is unknown");
   }
+}
+
+/**
+ * Posts the firmware udpate status.
+ */
+function getUpdateStatus() 
+{
+    var xhr = new XMLHttpRequest();
+    var requestURL = "/OTAstatus";
+    xhr.open('POST', requestURL, false);
+    xhr.send('ota_update_status');
+
+    if (xhr.readyState == 4 && xhr.status == 200) 
+	{		
+        var response = JSON.parse(xhr.responseText);
+						
+	 	document.getElementById("latest_firmware").innerHTML = response.compile_date + " - " + response.compile_time
+
+		// If flashing was complete it will return a 1, else -1
+		// A return of 0 is just for information on the Latest Firmware request
+        if (response.ota_update_status == 1) 
+		{
+    		// Set the countdown timer time
+            seconds = 10;
+            // Start the countdown timer
+            otaRebootTimer();
+        } 
+        else if (response.ota_update_status == -1)
+		{
+            document.getElementById("ota_update_status").innerHTML = "!!! Upload Error !!!";
+        }
+    }
 }
 
 /**
@@ -249,7 +285,7 @@ function updateADCValue() {
       return response.text();
     })
     .then((data) => {
-      console.log("ADC Value:", data); // Logging ADC value to the console
+      // console.log("ADC Value:", data); // Logging ADC value to the console
       document.getElementById("adcValue").innerText = data;
 
       var adcValue = parseFloat(data); // Convert string to float
@@ -261,7 +297,7 @@ function updateADCValue() {
       }
 
       // Update the chart
-      console.log("yvlaue", yValues)
+      // console.log("yvlaue", yValues)
       myChart.data.datasets[0].data = yValues;
       myChart.update();
 
@@ -271,4 +307,9 @@ function updateADCValue() {
     });
 }
 
-setInterval(updateADCValue, 300);
+setInterval(updateADCValue, 100);
+
+function updateFirmwareButton(){
+  document.getElementById("OTA").style.display = "block";
+  document.querySelector('footer').style = 'display: none';
+}
