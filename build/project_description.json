@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "PocketMonitor",
-    "project_version":    "e83567f-dirty",
+    "project_version":    "e3f8a66-dirty",
     "project_path":       "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor",
     "idf_path":           "C:/Users/juang/esp/esp-idf",
     "build_dir":          "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build",
