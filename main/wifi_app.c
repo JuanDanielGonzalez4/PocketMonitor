@@ -8,6 +8,7 @@
 #include "lwip/netdb.h"
 
 #include "http_server.h"
+#include "rgb_led.h"
 #include "tasks_common.h"
 #include "wifi_app.h"
 
@@ -253,7 +254,7 @@ void wifi_app_start(void)
 {
 	ESP_LOGI(TAG, "STARTING WIFI APPLICATION");
 
-
+	rgb_led_wifi_app_started();
 	// Disable default WiFi logging messages
 	esp_log_level_set("wifi", ESP_LOG_NONE);
 

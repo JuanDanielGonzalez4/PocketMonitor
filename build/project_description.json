@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "PocketMonitor",
-    "project_version":    "e3f8a66-dirty",
+    "project_version":    "9ac67ae-dirty",
     "project_path":       "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor",
     "idf_path":           "C:/Users/juang/esp/esp-idf",
     "build_dir":          "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build",
@@ -790,7 +790,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/esp-idf/main/libmain.a",
-            "sources": [ "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/main.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/wifi_app.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/http_server.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/adc.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/app.css.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/app.js.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/chart.js.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/favicon.ico.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/index.html.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/jquery-3.3.1.min.js.S" ],
+            "sources": [ "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/main.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/wifi_app.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/http_server.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/adc.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/rgb_led.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/uart.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/main/button.c", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/app.css.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/app.js.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/chart.js.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/favicon.ico.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/index.html.S", "C:/Users/juang/OneDrive/Documentos/PocketMonitor/PocketMonitor/build/jquery-3.3.1.min.js.S" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

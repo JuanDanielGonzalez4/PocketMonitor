@@ -286,7 +286,7 @@ function updateADCValue() {
     })
     .then((data) => {
       // console.log("ADC Value:", data); // Logging ADC value to the console
-      document.getElementById("adcValue").innerText = data;
+      // document.getElementById("adcValue").innerText = data;
 
       var adcValue = parseFloat(data); // Convert string to float
       yValues.push(adcValue); // Add the value to the array
@@ -297,7 +297,6 @@ function updateADCValue() {
       }
 
       // Update the chart
-      // console.log("yvlaue", yValues)
       myChart.data.datasets[0].data = yValues;
       myChart.update();
 
@@ -309,7 +308,60 @@ function updateADCValue() {
 
 setInterval(updateADCValue, 100);
 
+
+function updateTEMPValue() {
+  fetch("/temp_value")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.text();
+    })
+    .then((data) => {
+      console.log("Temp Value:", data); // Logging ADC value to the console
+      document.getElementById("adcValue").innerText = data;
+      // document.getElementById("adcValue").innerText = data;
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+    });
+}
+// Update every 2 seconds
+setInterval(updateTEMPValue, 500);
+
 function updateFirmwareButton(){
   document.getElementById("OTA").style.display = "block";
   document.querySelector('footer').style = 'display: none';
 }
+const delayUpdateTemp = 1000;
+
+updateButtonA = setInterval(updateButonA, delayUpdateTemp);
+updateButtonB=setInterval(updateButonB, delayUpdateTemp);
+
+function updateButonA() {
+	let requestA = new XMLHttpRequest();
+
+	requestA.addEventListener("readystatechange", () => {
+		// console.log(requestA, requestA.readyState);
+		if (requestA.readyState === 4) {
+			console.log(requestA.responseText);
+		}
+	});
+	requestA.open('GET', "/buttonA");
+	requestA.responseType = "text";
+	requestA.send();
+}
+function updateButonB() {
+	let requestB = new XMLHttpRequest();
+
+	requestB.addEventListener("readystatechange", () => {
+		// console.log(requestB, requestB.readyState);
+		if (requestB.readyState === 4) {
+      console.log(requestA.responseText);
+		}
+	});
+	requestB.open('GET', "/buttonB");
+	requestB.responseType = "text";
+	requestB.send();
+}
+
