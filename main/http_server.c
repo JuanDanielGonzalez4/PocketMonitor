@@ -164,6 +164,43 @@ static esp_err_t http_server_index_html_handler(httpd_req_t *req)
 	return ESP_OK;
 }
 
+static esp_err_t buttonA(httpd_req_t *req)
+{
+	int static valueA = 0;
+
+	xQueuePeek(Button_queue_A, &valueA, pdMS_TO_TICKS(200));
+
+	char buffer[12];
+	sprintf(buffer, "%d", valueA);
+	char *value_str = buffer;
+
+	ESP_LOGI(TAG, "Button A requested");
+	printf("%s",value_str);
+
+	httpd_resp_set_type(req, "application/json");
+	httpd_resp_send(req, value_str, strlen(value_str));
+
+	return ESP_OK;
+}
+
+static esp_err_t buttonB(httpd_req_t *req)
+{
+	int static valueB = 0;
+
+	xQueuePeek(Button_queue_B, &valueB, pdMS_TO_TICKS(200));
+
+	char buffer[12];
+	sprintf(buffer, "%d", valueB);
+	char *value_str = buffer;
+
+	ESP_LOGI(TAG, "Button B requested");
+	printf("%s",value_str);
+
+	httpd_resp_set_type(req, "application/json");
+	httpd_resp_send(req, value_str, strlen(value_str));
+
+	return ESP_OK;
+}
 /**
  * app.css get handler is requested when accessing the web page.
  * @param req HTTP request for which the uri needs to be handled.
@@ -614,6 +651,20 @@ static httpd_handle_t http_server_configure(void)
 			.handler = http_server_wifi_connect_json_handler,
 			.user_ctx = NULL};
 		httpd_register_uri_handler(http_server_handle, &wifi_connect_json);
+
+		httpd_uri_t buttonA_uri = {
+			.uri = "/buttonA",
+			.method = HTTP_GET,
+			.handler = buttonA,
+			.user_ctx = NULL};
+		httpd_register_uri_handler(http_server_handle, &buttonA_uri);
+
+		httpd_uri_t buttonB_uri = {
+			.uri = "/buttonB",
+			.method = HTTP_GET,
+			.handler = buttonB,
+			.user_ctx = NULL};
+		httpd_register_uri_handler(http_server_handle, &buttonB_uri);
 
 		// register wifiConnectStatus.json handler
 		httpd_uri_t wifi_connect_status_json = {
