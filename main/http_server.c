@@ -40,6 +40,11 @@ esp_timer_handle_t fw_update_reset;
 // Extern Queue to receive data from the adc
 extern QueueHandle_t ADC_QUEUE;
 
+extern QueueHandle_t ADC_QUEUE_TEMP;
+
+extern QueueHandle_t Button_queue_A;
+extern QueueHandle_t Button_queue_B;
+
 
 // Embedded files: JQuery, index.html, app.css, app.js and favicon.ico files
 extern const uint8_t jquery_3_3_1_min_js_start[] asm("_binary_jquery_3_3_1_min_js_start");
@@ -159,6 +164,36 @@ static esp_err_t http_server_index_html_handler(httpd_req_t *req)
 	return ESP_OK;
 }
 
+static esp_err_t buttonA(httpd_req_t *req)
+{
+	int static valueA = 0;
+
+	xQueuePeek(Button_queue_A, &valueA, pdMS_TO_TICKS(200));
+
+	char buffer[12];
+	sprintf(buffer, "%d", valueA);
+	char *value_str = buffer;
+	httpd_resp_set_type(req, "application/json");
+	httpd_resp_send(req, value_str, strlen(value_str));
+
+	return ESP_OK;
+}
+
+static esp_err_t buttonB(httpd_req_t *req)
+{
+	int static valueB = 0;
+
+	xQueuePeek(Button_queue_B, &valueB, pdMS_TO_TICKS(200));
+
+	char buffer[12];
+	sprintf(buffer, "%d", valueB);
+	char *value_str = buffer;
+
+	httpd_resp_set_type(req, "application/json");
+	httpd_resp_send(req, value_str, strlen(value_str));
+
+	return ESP_OK;
+}
 /**
  * app.css get handler is requested when accessing the web page.
  * @param req HTTP request for which the uri needs to be handled.
@@ -350,6 +385,26 @@ static esp_err_t http_server_wifi_connect_status_json_handler(httpd_req_t *req)
 
 	httpd_resp_set_type(req, "application/json");
 	httpd_resp_send(req, statusJSON, strlen(statusJSON));
+
+	return ESP_OK;
+}
+
+static esp_err_t http_server_temp_value_handler(httpd_req_t *req)
+{
+	double temp_value;
+
+	// Attempt to receive the ADC value from the queue
+	if (xQueueReceive(ADC_QUEUE_TEMP, &temp_value, portMAX_DELAY))
+	{
+		char response[10];
+		snprintf(response, sizeof(response), "%f", temp_value); // sending just the value
+		httpd_resp_send(req, response, strlen(response));
+	}
+	else
+	{
+		// Handle the error, e.g., send a response indicating failure.
+		httpd_resp_send_500(req);
+	}
 
 	return ESP_OK;
 }
@@ -590,6 +645,20 @@ static httpd_handle_t http_server_configure(void)
 			.user_ctx = NULL};
 		httpd_register_uri_handler(http_server_handle, &wifi_connect_json);
 
+		httpd_uri_t buttonA_uri = {
+			.uri = "/buttonA",
+			.method = HTTP_GET,
+			.handler = buttonA,
+			.user_ctx = NULL};
+		httpd_register_uri_handler(http_server_handle, &buttonA_uri);
+
+		httpd_uri_t buttonB_uri = {
+			.uri = "/buttonB",
+			.method = HTTP_GET,
+			.handler = buttonB,
+			.user_ctx = NULL};
+		httpd_register_uri_handler(http_server_handle, &buttonB_uri);
+
 		// register wifiConnectStatus.json handler
 		httpd_uri_t wifi_connect_status_json = {
 			.uri = "/wifiConnectStatus",
@@ -605,6 +674,16 @@ static httpd_handle_t http_server_configure(void)
 			.handler = http_server_adc_value_handler,
 			.user_ctx = NULL};
 		httpd_register_uri_handler(http_server_handle, &adc_value);
+		
+
+
+		httpd_uri_t temp_value = {
+			.uri = "/temp_value",
+			.method = HTTP_GET,
+			.handler = http_server_temp_value_handler,
+			.user_ctx = NULL};
+		httpd_register_uri_handler(http_server_handle, &temp_value);
+		
 
 		// register OTAupdate handler
 		httpd_uri_t OTA_update = {
