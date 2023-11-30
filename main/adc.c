@@ -46,28 +46,6 @@ void adc_config(void)
 }
 
 void calculate_bpm(){
-
-    int64_t beat_new = esp_timer_get_time() / 1000; // Convert to milliseconds
-    int64_t diff = beat_new - beat_old;
-    if (diff > 0) { // Prevent division by zero
-        float currentBPM = 60000.0 / diff; // Convert to BPM
-        beats[beatIndex] = currentBPM;
-
-        float total = 0.0;
-        for (int i = 0; i < BPM_ARRAY_SIZE; i++) {
-            total += beats[i];
-        }
-        BPM = (int)(total / BPM_ARRAY_SIZE);
-
-        // printf("BPM: %d\n", BPM);
-
-        xQueueSend(BPM_QUEUE, &BPM, portMAX_DELAY);
-
-
-
-        beat_old = beat_new;
-        beatIndex = (beatIndex + 1) % BPM_ARRAY_SIZE;
-    }
 }
 void adc_read_task(void *pvParameters)
 {
@@ -82,7 +60,27 @@ void adc_read_task(void *pvParameters)
         xQueueSend(ADC_QUEUE, &voltage_adc, portMAX_DELAY);
 
         if (voltage_adc>BPM_TRESHOLD){
-            calculate_bpm();
+            int64_t beat_new = esp_timer_get_time() / 1000; // Convert to milliseconds
+            int64_t diff = beat_new - beat_old;
+            if (diff > 0) { // Prevent division by zero
+                float currentBPM = 60000.0 / diff; // Convert to BPM
+                beats[beatIndex] = currentBPM;
+
+                float total = 0.0;
+                for (int i = 0; i < BPM_ARRAY_SIZE; i++) {
+                    total += beats[i];
+                }
+                BPM = (int)(total / BPM_ARRAY_SIZE);
+
+                printf("BPM: %d\n", BPM);
+
+                xQueueSend(BPM_QUEUE, &BPM, portMAX_DELAY);
+
+
+
+                beat_old = beat_new;
+                beatIndex = (beatIndex + 1) % BPM_ARRAY_SIZE;
+            }
         } 
 
         vTaskDelay(pdMS_TO_TICKS(DELAY));
@@ -96,7 +94,7 @@ void adc_temp_read_task(void *pvParameters){
         ESP_ERROR_CHECK(adc_oneshot_read(adc1_handle, ADC_CHANNEL_5, &data_temp));
 
         double voltage_adc_temp = ((double)data_temp / ADC_MAX_VALUE) * VOLTAGE_REFERENCE_TEMP;
-        double temperature_celsius = voltage_adc_temp / CELCIUS_RATE;
+        double temperature_celsius = data_temp / CELCIUS_RATE;
         xQueueSend(ADC_QUEUE_TEMP, &temperature_celsius, portMAX_DELAY);
 
         vTaskDelay(pdMS_TO_TICKS(DELAY));

@@ -337,6 +337,8 @@ const delayUpdateTemp = 1000;
 
 updateButtonA = setInterval(updateButonA, delayUpdateTemp);
 updateButtonB=setInterval(updateButonB, delayUpdateTemp);
+valueB = 0;
+valueA = 0;
 
 function updateButonA() {
 	let requestA = new XMLHttpRequest();
@@ -344,7 +346,12 @@ function updateButonA() {
 	requestA.addEventListener("readystatechange", () => {
 		// console.log(requestA, requestA.readyState);
 		if (requestA.readyState === 4) {
-			console.log(requestA.responseText);
+      if (requestA.responseText != valueA){
+        console.log(requestA.responseText);
+        document.getElementById("heartRate").style.display = "none";
+        document.getElementById("chart-container").style.display = "block";
+        valueA = requestA.responseText;
+      }
 		}
 	});
 	requestA.open('GET', "/buttonA");
@@ -355,9 +362,14 @@ function updateButonB() {
 	let requestB = new XMLHttpRequest();
 
 	requestB.addEventListener("readystatechange", () => {
-		// console.log(requestB, requestB.readyState);
+    console.log(requestB.responseText);
 		if (requestB.readyState === 4) {
-      console.log(requestB.responseText);
+      if (requestB.responseText != valueB){
+        console.log(requestB.responseText);
+        document.getElementById("heartRate").style.display = "block";
+        document.getElementById("chart-container").style.display = "none";
+        valueB = requestB.responseText;
+      }
 		}
 	});
 	requestB.open('GET', "/buttonB");

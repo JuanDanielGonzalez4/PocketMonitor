@@ -173,10 +173,6 @@ static esp_err_t buttonA(httpd_req_t *req)
 	char buffer[12];
 	sprintf(buffer, "%d", valueA);
 	char *value_str = buffer;
-
-	ESP_LOGI(TAG, "Button A requested");
-	printf("%s",value_str);
-
 	httpd_resp_set_type(req, "application/json");
 	httpd_resp_send(req, value_str, strlen(value_str));
 
@@ -192,9 +188,6 @@ static esp_err_t buttonB(httpd_req_t *req)
 	char buffer[12];
 	sprintf(buffer, "%d", valueB);
 	char *value_str = buffer;
-
-	ESP_LOGI(TAG, "Button B requested");
-	printf("%s",value_str);
 
 	httpd_resp_set_type(req, "application/json");
 	httpd_resp_send(req, value_str, strlen(value_str));

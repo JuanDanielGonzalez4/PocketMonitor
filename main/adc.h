@@ -11,7 +11,7 @@
 #define EXAMPLE_ADC1_CHAN0 ADC_CHANNEL_4
 #define EXAMPLE_ADC1_CHAN1 ADC_CHANNEL_5
 
-#define DELAY 300
+#define DELAY 100
 #define DELAY_TEMP 1000
 
 #define VOLTAGE_REFERENCE 3300
@@ -20,7 +20,7 @@
 
 #define CELCIUS_RATE 10
 
-#define BPM_TRESHOLD 3000
+#define BPM_TRESHOLD 1800
 #define BPM_ARRAY_SIZE 500
 void adc_config(void);
 

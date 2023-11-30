@@ -33,15 +33,29 @@ void read_uart_task(void *pvParameters) {
             data[value] = '\0'; // Ensure null-termination
             int age = atoi((char *)data);
             printf("Integer value: %d\n", age);
-
+            xQueueReceive(BPM_QUEUE, &BPM, portMAX_DELAY);
+            printf("variable %d", BPM );
             if (xQueueReceive(BPM_QUEUE, &BPM, portMAX_DELAY) == pdPASS){
                 if ((age>=3 &&  age<=4) && (BPM >=80 && BPM<=120)){
                     uart_write_bytes(UART_PORT, mensaje_1,strlen(mensaje_1));
+                }  
+                else if ((age>=5 &&  age<=6) && (BPM >=75 && BPM<=115)){
+                    uart_write_bytes(UART_PORT, mensaje_1,strlen(mensaje_1));
                 }
+                else if ((age>=7 &&  age<=9) && (BPM >=70 && BPM<=110)){
+                    uart_write_bytes(UART_PORT, mensaje_1,strlen(mensaje_1));
+                }
+                else if ((age>=10 &&  age<=80) && (BPM >=60 && BPM<=100)){
+                    uart_write_bytes(UART_PORT, mensaje_1,strlen(mensaje_1));
+                }
+                else{
+                    uart_write_bytes(UART_PORT,mensaje_3,strlen(mensaje_3));
+                } 
+            }
             else{
                 uart_write_bytes(UART_PORT,mensaje_2,strlen(mensaje_2));
-                }     
-            }
+            }     
+            
         }
 
         // Delay to prevent constant CPU occupation

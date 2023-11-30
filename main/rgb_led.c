@@ -136,15 +136,15 @@ void rgb_led_bpm(void *pvParameters){
 		if (xQueueReceive(BPM_QUEUE, &BPM, portMAX_DELAY) == pdPASS)
 		{
 			printf("RGB: %d\n", BPM);
-			if (BPM < 10){
-				rgb_led_set_color(0, 255, 0);
+			if (BPM < 30){
+				rgb_led_set_color(255, 0, 0);
 			}
-			else if ((BPM > 10) && (BPM < 15)){
-				rgb_led_set_color(255, 7, 7);
+			else if ((BPM >= 31) && (BPM < 60)){
+				rgb_led_set_color(0, 0, 255);
 			}
 			else{
 				// printf("enter");
-				rgb_led_set_color(255,0,0);
+				rgb_led_set_color(0,255,0);
 			}
 			
 		}

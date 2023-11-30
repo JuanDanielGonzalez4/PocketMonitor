@@ -58,7 +58,7 @@ footer{
   height: 80px;
 }
 
-.chart-container{
+#chart-container{
     width: 70%; 
     height: 50vh; 
     margin-bottom: 2rem;
@@ -70,6 +70,11 @@ footer{
   display: none;
   height: auto;
 }
+
+#heartRate{
+  display: none;
+}
+
 p{
   font-size: 2.8rem;
   font-weight: 700;
